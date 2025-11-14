@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Melody | <%= title %>
+  </title>
+  <link rel="stylesheet" href="/admin/vendors/iconfonts/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.addons.css">
+  <link rel="stylesheet" href="/admin/css/style.css">
+  <link rel="shortcut icon" href="http://www.urbanui.com/" />
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/header') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../partials/sidebar') %>
+          <div class="main-panel">
+            <div class="content-wrapper">
+              <%- body %>
+            </div>
+            <%- include('../partials/footer') %>
+          </div>
+      </div>
+  </div>
+
+  <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/admin/vendors/js/vendor.bundle.addons.js"></script>
+
+  <!-- ✅ Theme core JS -->
+  <script src="/admin/js/off-canvas.js"></script>
+  <script src="/admin/js/hoverable-collapse.js"></script>
+  <script src="/admin/js/misc.js"></script>
+  <script src="/admin/js/settings.js"></script>
+  <script src="/admin/js/todolist.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+  <%- typeof pageScripts !=='undefined' ? pageScripts : '' %>
+
+
+    <script>
+      async function initDataTable(apiUrl, tableSelector, rowTemplate, options = {}) {
+        const table = document.querySelector(`${tableSelector} tbody`);
+        if (!table) return console.error(`Table not found: ${tableSelector}`);
+
+        try {
+          // Fetch data
+          const response = await fetch(apiUrl);
+          if (!response.ok) throw new Error(`Failed to fetch data from ${apiUrl}`);
+          const result = await response.json();
+
+          // Detect if DataTables server-side JSON (data array inside)
+          const data = result.data || result;
+
+          // Clear table body
+          table.innerHTML = '';
+
+          if (data && data.length > 0) {
+            data.forEach((item, i) => {
+              table.innerHTML += rowTemplate(item, i);
+            });
+          } else {
+            const colCount = document.querySelectorAll(`${tableSelector} thead th`).length;
+            table.innerHTML = `<tr><td colspan="${colCount}" class="text-center text-muted">No records found</td></tr>`;
+          }
+
+          // Wait for DOM to update before initializing DataTable
+          setTimeout(() => {
+            if ($.fn.DataTable.isDataTable(tableSelector)) {
+              $(tableSelector).DataTable().clear().destroy();
+            }
+
+            $(tableSelector).DataTable({
+              responsive: true,
+              pageLength: 10,
+              aLengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+              language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search...",
+                emptyTable: "No data available",
+                zeroRecords: "No matching records found",
+              },
+              ...options, // allow overrides
+            });
+          }, 100);
+        } catch (err) {
+          console.error("❌ initDataTable Error:", err);
+          const colCount = document.querySelectorAll(`${tableSelector} thead th`).length;
+          table.innerHTML = `<tr><td colspan="${colCount}" class="text-center text-danger">Error loading data</td></tr>`;
+        }
+      }
+
+
+      $('input, select, textarea').on('KeyUp change', function () {
+        clearError($(this));
+      });
+      function clearError(input) {
+        input.siblings('label.error').remove();
+        input.closest('.form-group').removeClass('has-danger');
+      }
+    </script>
+</body>
+
+
+</html>

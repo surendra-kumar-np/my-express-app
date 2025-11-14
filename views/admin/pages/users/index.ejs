@@ -1,0 +1,68 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="card-title mb-0">User List</h4>
+      <a href="/users/add" class="btn btn-primary btn-sm">+ Add User</a>
+    </div>
+
+    <div class="table-responsive">
+      <table id="userTable" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%
+pageScripts = `
+<script>
+  const baseUrl = window.location.origin;
+
+  async function deleteUser(id) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    const response = await fetch("/api/users/" + id, { method: "DELETE" });
+    if (response.ok) {
+      alert("User deleted successfully");
+      window.location.reload();
+    } else {
+      alert("Error deleting user");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initDataTable("/api/users", "#userTable", (user, i) => {
+      const image = user.image
+        ? '<img src="' + baseUrl + '/public' + user.image + '" alt="User Image">'
+        : '<span class="text-muted">No Image</span>';
+
+      return \`
+        <tr>
+          <td>\${i + 1}</td>
+          <td>\${image}</td>
+          <td>\${user.name}</td>
+          <td>\${user.email}</td>
+          <td>\${user.city || '-'}</td>
+          <td>\${user.status == 1 ? 'Active' : 'Inactive'}</td>
+          <td>
+            <a href="/users/edit/\${user.id}" class="btn btn-info py-2">Edit</a>
+            <button class="btn py-2 btn-danger" onclick="deleteUser(\${user.id})">Delete</button>
+          </td>
+        </tr>
+      \`;
+    });
+  });
+</script>
+`;
+%>
+

@@ -1,0 +1,119 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">
+                <%= title %>
+            </h4>
+            <a href="/users" class="btn btn-dark btn-sm"><i class="fa fa-arrow-left"> Back</i></a>
+        </div>
+
+        <form id="manageForm" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control form-control-sm" name="name" id="name"
+                            placeholder="Enter name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" id="email" class="form-control form-control-sm"
+                            placeholder="Enter email" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" id="phone" class="form-control form-control-sm"
+                            placeholder="Enter phone" maxlength="10" minlength="10"
+                            oninput="if (this.value.startsWith('0')) { this.value = this.value.substring(1); } this.value = this.value.replace(/[^0-9]/g, '');" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" class="form-control form-control-sm" name="image" id="image">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" class="form-control form-control-sm" name="state" id="state"
+                            placeholder="Enter state">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" class="form-control form-control-sm" name="city" id="city"
+                            placeholder="Enter city">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control form-control-sm" name="address" id="address"
+                            placeholder="Enter address">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="pin_code">Pin Code</label>
+                        <input type="text" class="form-control form-control-sm" name="pin_code" id="pin_code"
+                            placeholder="Enter pin code" maxlength="6" minlength="6"
+                            oninput="if (this.value.startsWith('0')) { this.value = this.value.substring(1); } this.value = this.value.replace(/[^0-9]/g, '');">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="/users" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+
+
+<% pageScripts=` <script>
+    $('#manageForm').on('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const response = await fetch('/api/users', {
+    method: 'POST',
+    body: formData
+    });
+
+    if (response.ok) {
+    alert('User added successfully!');
+    $('#manageForm')[0].reset();
+    window.location.href = '/users';
+    } else {
+    const data = await response.json();
+    const errors = data.errors || {};
+    for (const [field, message] of Object.entries(errors)) {
+    const input = $("[name='" + field + "']");
+    if (input.length) {
+    input.after('<label class="error mt-2 text-danger" for="' + field + '">' + message + '</label>');
+    input.closest('.form-group').addClass('has-danger');
+    }
+    }
+    }
+    });
+    
+    </script>
+    `;
+    %>

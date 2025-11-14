@@ -1,0 +1,22 @@
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "my-express-app/\r │\r ├── config/\r │   └── db.js\r │\r ├── routes/\r │   └── api/\r │       └── users.js         ✅ All user CRUD routes\r │\r ├── views/\r │   └── admin/\r │       ├── layouts/\r │       │   └── main.ejs\r │       └── pages/\r │           ├── dashboard.ejs\r │           └── users.ejs\r │\r ├── public/\r │   └── admin/\r │       ├── css/\r │       ├── js/\r │       └── images/\r │\r ├── server.js\r └── package.json",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "node-fetch": "^3.3.2"
+  }
+}

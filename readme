@@ -1,0 +1,38 @@
+my-express-app/
+│
+├── config/
+│   └── db.js
+│
+├── routes/
+│   └── api/
+│       └── users.js         ✅ All user CRUD routes
+│
+├── views/
+│   └── admin/
+│       ├── layouts/
+│       │   └── main.ejs
+│       └── pages/
+│           ├── dashboard.ejs
+│           └── users.ejs
+│
+├── public/
+│   └── admin/
+│       ├── css/
+│       ├── js/
+│       └── images/
+│
+├── server.js
+└── package.json
+
+
+
+
+
+You can now hit these endpoints:
+
+Method	Endpoint	Description
+GET	http://localhost:3000/api/users	List all users
+GET	http://localhost:3000/api/users/1	Get user by ID
+POST	http://localhost:3000/api/users	Create new user
+PUT	http://localhost:3000/api/users/1	Update user
+DELETE	http://localhost:3000/api/users/1	Delete user
