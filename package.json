@@ -1,22 +1,35 @@
 {
   "name": "my-express-app",
   "version": "1.0.0",
-  "description": "my-express-app/\r │\r ├── config/\r │   └── db.js\r │\r ├── routes/\r │   └── api/\r │       └── users.js         ✅ All user CRUD routes\r │\r ├── views/\r │   └── admin/\r │       ├── layouts/\r │       │   └── main.ejs\r │       └── pages/\r │           ├── dashboard.ejs\r │           └── users.ejs\r │\r ├── public/\r │   └── admin/\r │       ├── css/\r │       ├── js/\r │       └── images/\r │\r ├── server.js\r └── package.json",
+  "description": "ecommerce-app/\r │\r ├── config/\r │   ├── db.js\r │   └── config.js\r │\r ├── controllers/\r │   ├── authController.js\r │   ├── userController.js\r │   ├── productController.js\r │   ├── categoryController.js\r │   └── orderController.js\r │\r ├── models/\r │   ├── User.js\r │   ├── Product.js\r │   ├── Category.js\r │   └── Order.js\r │\r ├── routes/\r │   ├── authRoutes.js\r │   ├── userRoutes.js\r │   ├── productRoutes.js\r │   ├── categoryRoutes.js\r │   └── orderRoutes.js\r │\r ├── middleware/\r │   ├── authMiddleware.js\r │   └── errorMiddleware.js\r │\r ├── utils/\r │   └── fileUpload.js\r │\r ├── uploads/   # Product images\r │\r ├── server.js\r └── package.json",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surendra-kumar-np/my-express-app.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/surendra-kumar-np/my-express-app/issues"
+  },
+  "homepage": "https://github.com/surendra-kumar-np/my-express-app#readme",
   "dependencies": {
-    "ejs": "^3.1.10",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "express-ejs-layouts": "^2.5.1",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "mysql2": "^3.15.3",
-    "node-fetch": "^3.3.2"
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
