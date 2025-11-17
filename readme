@@ -1,25 +1,37 @@
 my-express-app/
 │
 ├── config/
-│   └── db.js
+│   ├── db.js
+│   └── config.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── userController.js
+│   ├── productController.js
+│   ├── categoryController.js
+│   └── orderController.js
+│
+├── models/
+│   ├── User.js
+│   ├── Product.js
+│   ├── Category.js
+│   └── Order.js
 │
 ├── routes/
-│   └── api/
-│       └── users.js         ✅ All user CRUD routes
+│   ├── authRoutes.js
+│   ├── userRoutes.js
+│   ├── productRoutes.js
+│   ├── categoryRoutes.js
+│   └── orderRoutes.js
 │
-├── views/
-│   └── admin/
-│       ├── layouts/
-│       │   └── main.ejs
-│       └── pages/
-│           ├── dashboard.ejs
-│           └── users.ejs
+├── middleware/
+│   ├── authMiddleware.js
+│   └── errorMiddleware.js
 │
-├── public/
-│   └── admin/
-│       ├── css/
-│       ├── js/
-│       └── images/
+├── utils/
+│   └── fileUpload.js
+│
+├── uploads/   # Product images
 │
 ├── server.js
 └── package.json
@@ -27,17 +39,85 @@ my-express-app/
 
 
 
+=> API Endpoints
 
-You can now hit these endpoints:
+1. Auth APIs
 
-Method	Endpoint	Description
-GET	http://localhost:3000/api/users	List all users
-GET	http://localhost:3000/api/users/1	Get user by ID
-POST	http://localhost:3000/api/users	Create new user
-PUT	http://localhost:3000/api/users/1	Update user
-DELETE	http://localhost:3000/api/users/1	Delete user
+    POST /api/auth/register → User registration
+
+    POST /api/auth/login → User login
+
+    GET /api/auth/me → Get logged-in user profile
+
+2. User APIs
+
+    GET /api/users/ → List users (admin only)
+
+    GET /api/users/:id → Get user detail
+
+    PUT /api/users/:id → Update user
+
+    DELETE /api/users/:id → Delete user
+
+3. Category APIs
+
+    GET /api/categories/ → List categories
+
+    POST /api/categories/ → Add category (admin only)
+
+    PUT /api/categories/:id → Update category (admin only)
+
+    DELETE /api/categories/:id → Delete category (admin only)
+
+4. Product APIs
+
+    GET /api/products/ → List products
+
+    GET /api/products/:id → Get product details
+
+    POST /api/products/ → Add product (admin only)
+
+    PUT /api/products/:id → Update product (admin only)
+
+    DELETE /api/products/:id → Delete product (admin only)
+
+5. Order APIs
+
+    GET /api/orders/ → List all orders (admin only)
+
+    GET /api/orders/:id → Get order details
+
+    POST /api/orders/ → Place new order
+
+    PUT /api/orders/:id → Update order status (admin only)
+
+    DELETE /api/orders/:id → Cancel order
 
 
 
+    Suggested Packages (Node.js)
 
-check
+    mkdir ecommerce-app
+    cd ecommerce-app
+    npm init -y
+    npm install express mysql2 sequelize dotenv bcryptjs jsonwebtoken multer cors
+    npm install --save-dev nodemon
+
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    }
+
+    express → Web framework
+
+    mysql2 / sequelize → MySQL ORM
+
+    dotenv → Environment variables
+
+    bcryptjs → Password hashing
+
+    jsonwebtoken → JWT authentication
+
+    multer → File uploads (product images)
+
+    cors → Enable cross-origin requests
