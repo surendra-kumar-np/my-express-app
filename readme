@@ -1,42 +1,86 @@
 my-express-app/
 │
 ├── config/
-│   ├── db.js
-│   └── config.js
+│   ├── db.js               # Sequelize connection
+│   └── config.js           # App-wide configs (PORT, JWT_SECRET if needed)
 │
 ├── controllers/
-│   ├── authController.js
-│   ├── userController.js
-│   ├── productController.js
-│   ├── categoryController.js
-│   └── orderController.js
+│   ├── authController.js   # Login, Register, Logout logic
+│   ├── userController.js   # Users CRUD logic
+│   ├── productController.js# Products CRUD logic
+│   ├── categoryController.js # Categories CRUD logic
+│   └── orderController.js  # Orders CRUD logic
 │
 ├── models/
-│   ├── User.js
-│   ├── Product.js
-│   ├── Category.js
-│   └── Order.js
+│   ├── User.js             # Sequelize User model
+│   ├── Product.js          # Sequelize Product model
+│   ├── Category.js         # Sequelize Category model
+│   └── Order.js            # Sequelize Order model
 │
 ├── routes/
-│   ├── authRoutes.js
-│   ├── userRoutes.js
-│   ├── productRoutes.js
-│   ├── categoryRoutes.js
-│   └── orderRoutes.js
+│   ├── authRoutes.js       # /auth/login, /auth/register, /auth/logout
+│   ├── userRoutes.js       # /users CRUD routes (session-protected)
+│   ├── productRoutes.js    # /products CRUD routes (session-protected)
+│   ├── categoryRoutes.js   # /categories CRUD routes (session-protected)
+│   └── orderRoutes.js      # /orders CRUD routes (session-protected)
+│
+├── views/
+│   ├── layouts/
+│   │    ├── main.ejs       # Dashboard layout (header, sidebar, footer)
+│   │    └── auth.ejs       # Auth pages layout
+│   ├── auth/
+│   │    ├── login.ejs
+│   │    └── register.ejs
+│   ├── dashboard/
+│   │    └── index.ejs      # Dashboard home page
+│   ├── partials/
+│   │    ├── header.ejs
+│   │    ├── sidebar.ejs
+│   │    └── footer.ejs
+│   ├── users/
+│   │    ├── index.ejs      # User list
+│   │    ├── add.ejs        # Add user form
+│   │    └── edit.ejs       # Edit user form
+│   ├── products/
+│   │    ├── index.ejs
+│   │    ├── add.ejs
+│   │    └── edit.ejs
+│   ├── categories/
+│   │    ├── index.ejs
+│   │    ├── add.ejs
+│   │    └── edit.ejs
+│   └── orders/
+│        ├── index.ejs
+│        ├── add.ejs
+│        └── edit.ejs
 │
 ├── middleware/
-│   ├── authMiddleware.js
-│   └── errorMiddleware.js
+│   ├── authMiddleware.js   # Session-protect routes (redirect if not logged in)
+│   └── errorMiddleware.js  # Optional error handling middleware
 │
 ├── utils/
-│   └── fileUpload.js
+│   └── fileUpload.js       # File upload helpers
 │
-├── uploads/   # Product images
+├── uploads/                # Uploaded files (images)
 │
-├── server.js
+├── server.js               # Express app entry point
 └── package.json
 
 
+➡️ Register:
+
+http://localhost:5000/auth/register
+
+➡️ Login:
+
+http://localhost:5000/auth/login
+
+➡️ After Login → Redirect to Dashboard:
+
+http://localhost:5000/dashboard
+
+http://localhost:5000/api/users
+http://localhost:5000/api/products
 
 
 => API Endpoints

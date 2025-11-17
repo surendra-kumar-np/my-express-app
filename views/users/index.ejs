@@ -10,11 +10,9 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Image</th>
             <th>Name</th>
             <th>Email</th>
-            <th>City</th>
-            <th>Status</th>
+            <th>role_id</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -31,7 +29,7 @@ pageScripts = `
 
   async function deleteUser(id) {
     if (!confirm('Are you sure you want to delete this user?')) return;
-    const response = await fetch("/api/users/" + id, { method: "DELETE" });
+    const response = await fetch("/users/delete/" + id, { method: "POST" });
     if (response.ok) {
       alert("User deleted successfully");
       window.location.reload();
@@ -40,26 +38,26 @@ pageScripts = `
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    initDataTable("/api/users", "#userTable", (user, i) => {
-      const image = user.image
-        ? '<img src="' + baseUrl + '/public' + user.image + '" alt="User Image">'
-        : '<span class="text-muted">No Image</span>';
+  document.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("/users/api/users");
+    const users = await res.json();
 
-      return \`
-        <tr>
-          <td>\${i + 1}</td>
-          <td>\${image}</td>
-          <td>\${user.name}</td>
-          <td>\${user.email}</td>
-          <td>\${user.city || '-'}</td>
-          <td>\${user.status == 1 ? 'Active' : 'Inactive'}</td>
-          <td>
-            <a href="/users/edit/\${user.id}" class="btn btn-info py-2">Edit</a>
-            <button class="btn py-2 btn-danger" onclick="deleteUser(\${user.id})">Delete</button>
-          </td>
-        </tr>
-      \`;
+    const tbody = document.querySelector("#userTable tbody");
+    tbody.innerHTML = "";
+
+    users.forEach((user, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.role_id || '-'}</td>
+        <td>
+          <a href="/users/edit/${user.id}" class="btn btn-info py-2">Edit</a>
+          <button class="btn btn-danger py-2" onclick="deleteUser(${user.id})">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(row);
     });
   });
 </script>
