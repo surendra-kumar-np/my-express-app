@@ -1,26 +1,73 @@
+// server.js
 const express = require('express');
-const cors = require('cors');
-const { PORT } = require('./config/config');
+const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
 const sequelize = require('./config/db');
 
-const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const userRoutes = require('./routes/userRoutes');
+dotenv.config();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+// --- EJS Setup ---
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
 
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/users', userRoutes);
+// --- Middleware ---
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'mysecretkey',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-sequelize.sync().then(() => {
-    app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+// ✅ Make session user available to EJS
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
 });
+
+// --- Static Files ---
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// --- Import Routes ---
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
+// --- Register Routes ---
+app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
+app.use('/users', userRoutes);
+app.use('/products', productRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/orders', orderRoutes);
+
+// --- Database Sync ---
+const PORT = process.env.PORT || 5000;
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('✅ Connected to MySQL successfully!');
+    return sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on http://localhost:${PORT}`)
+    );
+  })
+  .catch((err) => console.error('❌ Database connection failed:', err.message));
